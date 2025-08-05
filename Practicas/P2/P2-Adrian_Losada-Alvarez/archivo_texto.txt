@@ -1,0 +1,11 @@
+Débese facer uso das funcións vistas na clase.
+Toda chamada a unha función do sistema debe ter o seu correspondente chequeo de erro.
+Toda función debe sair co mensaxe de erro e o código apropiado en caso de erro (se o hai).
+O código non pode fallar aínda qu se usen datos de entrada incorrectos.
+Toda memoria reservada dinámicamente debe liberarse correctamente (so para C)
+O código debe de estar adecuadamente comentado,  indicándose de forma clara qué se fai en todas as funcións definidas, xunto coa explicación dos parámetros de entrada e saída das mesmas.
+O código deberá estar correctamente formateado e tabulado.
+O código debe compilar nun sistema Linux con gcc (para C). Se se usa Windows, débese convertir o ficheiro co código a formato Unix.
+Os programas deben funcionar aínda que o cliente e o servidor se executen en computadores diferentes
+Os parámetros de entrada necesarios deben ser proporcionados como argumentos do main.
+Penalizarase que aparezan mensaxes de Warning na compilación (coa opción -Wall)(so C)

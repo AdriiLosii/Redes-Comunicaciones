@@ -1,0 +1,52 @@
+1.c:
+(Mensaje a enviar: 'Hello world'
+Buffer de recvfrom() = 7)
+
+Terminal:
+Antes:
+> Se ha conectado el cliente con IP: 127.0.0.1; y puerto: 8085
+> Mensaje recibido: Hello w
+
+Después:
+> Se ha conectado el cliente con IP: 127.0.0.1; y puerto: 8085
+> Mensaje recibido: Hello w
+
+Modificaciones:
+envia-udp-1b.py: Nada
+recibe-udp-1c.py: Se agregó un bucle infinito que llama constantemente a la función recvfrom() y muestra el mensaje, si la longitud del mensaje es igual a 0 sale del bucle infinito.
+
+Resultado obtenido:
+Si la función recvfrom() lee menos datos de los que envió la función sendto() el mensaje queda truncado. Además si volvemos a llamar a la función recvfrom(), el resto del mensaje que no se llegó a recibir se pierde (no como en el caso de TCP en donde el resto del mensaje quedaba en un buffer) y el socket que recibe se queda esperando a que le envíen un nuevo mensaje (recvfrom() -> bloqueante).
+
+
+1.d:
+(array = [1.2, 34.0, 643.2, 32.7, 54.9, 20.5, 0.9, 32.1, 102.2])
+
+Empaquetando el array en formato FLOAT
+Terminal de programa que recibe:
+> Se ha conectado el cliente con IP: 127.0.0.1; y puerto: 8085
+> Mensaje recibido: (1.2000000476837158, 34.0, 643.2000122070312, 32.70000076293945, 54.900001525878906, 20.5, 0.8999999761581421, 32.099998474121094, 102.19999694824219)
+
+Modificaciones:
+f-envia-udp-1d.py: Definimos el array de números decimales y lo empaquetamos en formato float (struct.pack('f'), array)
+f-recibe-udp-1d.py: Como el mensaje llega empaquetado en binarios de 4 bytes, dividimos la longitud del mensaje recibido entre 4 para obtener la longitud original del array y lo desempaquetamos en formato float (struct.unpack('f'), msg_recv)
+
+
+Empaquetando el array en formato DOUBLE
+Terminal de programa que recibe:
+> Se ha conectado el cliente con IP: 127.0.0.1; y puerto: 8085
+> Mensaje recibido: (1.2, 34.0, 643.2, 32.7, 54.9, 20.5, 0.9, 32.1, 102.2)
+
+Modificaciones:
+f-envia-udp-1d.py: Definimos el array de números decimales y lo empaquetamos en formato double (struct.pack('d'), array)
+f-recibe-udp-1d.py: Como el mensaje llega empaquetado en binarios de 8 bytes, dividimos la longitud del mensaje recibido entre 8 para obtener la longitud original del array y lo desempaquetamos en formato double (struct.unpack('d'), msg_recv)
+
+
+Conclusión:
+Vemos que para enviar otros tipos de mensaje que no sean cadenas de texto se pueden utilizar las funciones 'struct.pack()' y 'struct.unpack()' para conseguir enviar el mensaje completo sin que quede truncado.
+Como python usa por defecto el formato double para los número decimales, al empaquetarlos y desempaquetarlos en formato float se pierde precisión y modifica los decimales ligeramente ya que está aproximándolos a números de tipo double.
+
+
+3:
+Conclusión:
+El servidor es capaz de atender varios clientes simultáneamente por lo que no se modificó, sin embargo, es necesario que no cierre el socket al terminar de "responder" los mensajes de uno de los clientes ya que si esto ocurre, el otro cliente no tiene socket al que seguir comunicándose.

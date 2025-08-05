@@ -1,0 +1,34 @@
+Mensaje a enviar: 'Hello world! How are you?'
+
+
+1.3:
+Terminal:
+> Mensaje recibido: Hello world! How are you?Hello world! How are you?
+> Número de bytes: 50
+
+Modificaciones:
+servidor-11.py: Duplicamos la línea que envia el mensaje ("socket_conn.send(msg.encode())") para así enviar dos mensajes
+cliente-11.py: Antes de utilizar la función "socket.recv()" para que así al servidor le de tiempo a enviar los dos mensajes
+
+Resultado obtenido:
+Al solo utilizar una vez la función "socket.recv()" después de que se hayan enviado los dos mensajes éstos se juntan, dando como resultado un solo mensaje del doble de número de bytes (25*2 = 50 bytes).
+
+
+
+1.4:
+Terminal:
+> Mensaje recibido: Hello wo
+> Número de bytes: 8
+> Mensaje recibido: rld! How
+> Número de bytes: 8
+> Mensaje recibido:  are you
+> Número de bytes: 8
+> Mensaje recibido: ?
+> Número de bytes: 1
+
+Modificaciones:
+servidor-11.py: No cambia nada
+cliente-11.py: Usamos un bucle infinito "while(True)" con la función "socket.recv()" dentro con los print() correspondientes para mostrar el mensaje recibido y su número de bytes, y la condición "if len(msg) == 0: break;" dentro de éste justo después de recibir el mensaje, además de modificar el buffer de recepción a 8 en lugar de 1024 de la función "socket.recv()"
+
+Resultado obtenido:
+Dado que hemos reducido el buffer de recepción de 1024 a 8 estamos limitando la capacidad de recepción que tiene el cliente a la hora de recibir mensajes. Como el mensaje a enviar tiene 25 bytes de longitud, estamos saturando el buffer y por lo tanto no es capaz de mostrar el mensaje entero con una sola ejecución de la función "socket.recv()", lo va mostrando de 8 en 8 bytes hasta que no queda más mensaje para mostrar (len(msg) == 0) y se cumple la condición para salir del bucle infinito (break).
